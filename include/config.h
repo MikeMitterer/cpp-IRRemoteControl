@@ -10,9 +10,9 @@
 
 // the configured options and settings for HelloWorld
 const std::string Project_NAME          = "IRRemoteControl";
-const std::string Project_VERSION       = ".";
-const std::string Project_VERSION_MAJOR = "";
-const std::string Project_VERSION_MINOR = "";
+const std::string Project_VERSION       = "0.1";
+const std::string Project_VERSION_MAJOR = "0";
+const std::string Project_VERSION_MINOR = "1";
 
 // Password compiled into source
 // Set in .config/passwords.cmake (or via ENV-VAR)
@@ -23,6 +23,6 @@ const char* const Project_SSID     = "";
 const char* const Project_PASSWORD = "";
 
 // Setup-Version (EEPROM)
-const uint8_t Project_Config_VERSION = ;
+const uint8_t Project_Config_VERSION = 1;
 
 

@@ -65,11 +65,13 @@ set(SOURCE_FILES
         src/gpio.h
         src/ota.h
         src/utils.h
+        src/ir_remote.h
 
         src/main.cpp
         src/ota.cpp
         src/utils.cpp
         src/gpio.cpp
+        src/ir_remote.cpp
 
         test/integration_test/integration_mc.cpp
         test/unit_test/unit_native.cpp
