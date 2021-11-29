@@ -12,6 +12,9 @@
 set (${PROJECT_NAME}_VERSION_MAJOR 0)
 set (${PROJECT_NAME}_VERSION_MINOR 1)
 
+# Version im EEPROM (Darf NICHT 0 sein!) - max Value: uint8 (0 - 255)
+set (${PROJECT_NAME}_CONFIG_VERSION 1)
+
 # configure a header file to pass some of the CMake settings
 # to the source code
 configure_file (
@@ -19,6 +22,7 @@ configure_file (
         "${PROJECT_SOURCE_DIR}/include/config.h"
         @ONLY
 )
+
 
 ## if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 #    include(CTest)
