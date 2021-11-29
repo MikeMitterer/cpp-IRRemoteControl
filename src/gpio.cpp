@@ -3,5 +3,6 @@
 //
 #include "gpio.h"
 
-OneButton button1(GPIO_NUM_12, true);
+OneButton button1(BUTTON_1, true);
+OneButton button2(BUTTON_2, true);
 

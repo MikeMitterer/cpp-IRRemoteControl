@@ -24,7 +24,6 @@
 #include <ESPAsyncWebServer.h>
 #include <ArduinoLog.h>
 
-
 const std::string ssid{ Project_SSID };
 const std::string password{  Project_PASSWORD };
 
@@ -53,14 +52,24 @@ void setup() {
     initLEDs(ledArray);
     initWIFI(ssid, password);
     initIR();
-    
+
+    // initButtons(buttons);
+
+    button1.setClickTicks(10);
+    button1.setDebounceTicks(5);
     button1.attachClick([] () {
         blink(LED_ORANGE);
     });
 
+    button2.setClickTicks(10);
+    button2.setDebounceTicks(5);
+    button2.attachClick([] () {
+        blink(LED_WHITE);
+    });
+
     initOTA();
     ArduinoOTA.begin();
-    
+
     // IrReceiver.begin(IR_RECEIVER_PIN, ENABLE_LED_FEEDBACK); // Start the receiver
     // IrSender.begin(IR_TRANSMITTER_PIN, ENABLE_LED_FEEDBACK); // Start the transmitter
     //
@@ -72,7 +81,9 @@ void setup() {
 
 void loop() {
     ArduinoOTA.handle();
+
     button1.tick();
+    button2.tick();
 
     blink(LED_GREEN);
 
@@ -89,5 +100,3 @@ void loop() {
 
     delay(1);
 }
-
-

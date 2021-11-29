@@ -41,6 +41,18 @@ const std::vector<uint8_t> ledArray = {
         LED_RED
 };
 
+const uint8_t BUTTON_1 = GPIO_NUM_13;
+const uint8_t BUTTON_2 = GPIO_NUM_14;
+// const uint8_t BUTTON_3 = GPIO_NUM_27;
+// const uint8_t BUTTON_4 = GPIO_NUM_26;
+
+const std::vector<uint8_t> buttons = {
+        BUTTON_1,
+        BUTTON_2,
+        // BUTTON_3,
+        // BUTTON_4,
+};
+
 // Reminder...
 //#ifdef BOARD_LOLIN32PRO
 //const gpio_num_t pinInternalLED = GPIO_NUM_5;
@@ -50,5 +62,6 @@ const std::vector<uint8_t> ledArray = {
 
 #ifndef UNIT_TEST
     extern OneButton button1;
+    extern OneButton button2;
 #endif
 
