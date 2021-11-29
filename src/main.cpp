@@ -37,9 +37,18 @@ void setup() {
 
     initLEDs(ledArray);
     initWIFI(ssid, password);
+    // initButtons(buttons);
 
+    button1.setClickTicks(10);
+    button1.setDebounceTicks(5);
     button1.attachClick([] () {
         blink(LED_ORANGE);
+    });
+
+    button2.setClickTicks(10);
+    button2.setDebounceTicks(5);
+    button2.attachClick([] () {
+        blink(LED_WHITE);
     });
 
     initOTA();
@@ -48,11 +57,13 @@ void setup() {
 
 void loop() {
     ArduinoOTA.handle();
+    
     button1.tick();
+    button2.tick();
 
     // Serial.println("Hello OAT!");
 
-    blink(LED_GREEN);
+    // blink(LED_GREEN);
 
-    delay(100);
+    delay(1);
 }

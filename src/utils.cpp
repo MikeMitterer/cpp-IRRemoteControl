@@ -20,6 +20,14 @@ void initLEDs(const std::vector<uint8_t>& leds) {
     }
 }
 
+void initButtons(const std::vector<uint8_t>& buttons){
+    // initialize Buttons digital pin as an input.
+    for (auto const& button : buttons) {
+        // pinMode(button, INPUT_PULLDOWN);
+        pinMode(button, INPUT);
+    }
+}
+
 void blink(uint8_t led) {
     // turn the LED on (HIGH is the voltage level)
     digitalWrite(led, HIGH);
