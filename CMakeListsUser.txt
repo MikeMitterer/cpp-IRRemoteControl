@@ -1,0 +1,73 @@
+# --------------------------------------------------------------------------------------------------
+# Vars:
+#   PROJECT_SOURCE_DIR
+#   /Volumes/DevLocal/DevCPP/Production/Projects/CatDoor2/LaserSensor
+# --------------------------------------------------------------------------------------------------
+
+# ┌──────────────────────────────────────────────────────────────────┐
+# │  Projects Settings                                               │
+# └──────────────────────────────────────────────────────────────────┘
+
+# configure a header file to pass some of the CMake settings
+# to the source code
+configure_file (
+        "${CMAKE_SOURCE_DIR}/.config/config.h.in"
+        "${PROJECT_SOURCE_DIR}/include/config.h"
+        @ONLY
+)
+
+## if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+#    include(CTest)
+## endif()
+
+# ┌──────────────────────────────────────────────────────────────────┐
+# │  Precompiled headers                                             │
+# └──────────────────────────────────────────────────────────────────┘
+
+add_library(${PROJECT_NAME}_pch
+        ${PROJECT_SOURCE_DIR}/src/stdafx.cpp ${PROJECT_SOURCE_DIR}/src/stdafx.h)
+
+
+#set_source_files_properties(${PROJECT_SOURCE_DIR}/src/stdafx.cpp
+#        PROPERTIES
+#        COMPILE_FLAGS "-include ${PROJECT_SOURCE_DIR}/src/stdafx.h")
+
+
+#add_test(usage_test test)
+#set_tests_properties(usage_test PROPERTIES WILL_FAIL TRUE)
+
+# ┌──────────────────────────────────────────────────────────────────┐
+# │  Targets                                                         │
+# └──────────────────────────────────────────────────────────────────┘
+
+add_custom_target(
+        ${PROJECT_NAME}_Upload ALL
+        COMMAND platformio -c clion run --target upload "$<$<NOT:$<CONFIG:All>>:-e${CMAKE_BUILD_TYPE}>"
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+include_directories(include)
+
+set(SOURCE_FILES
+        ${SRC_DEPENDENCIES}
+        include/config.h
+        src/stdafx.h
+        src/stdafx.cpp
+
+        src/gpio.h
+        src/ota.h
+        src/utils.h
+
+        src/main.cpp
+        src/ota.cpp
+        src/utils.cpp
+        src/gpio.cpp
+
+        test/integration_test/integration_mc.cpp
+        test/unit_test/unit_native.cpp
+
+        test/unit_test/calc/mysquare.h
+        test/unit_test/calc/mysquare.cpp
+        )
+
+list(APPEND SRC_LIST ${SOURCE_FILES})
