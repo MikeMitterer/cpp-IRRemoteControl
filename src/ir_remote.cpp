@@ -1,48 +1,62 @@
 //
-// Created by Sarah Riedmann on 29.11.21.
+// Created by Sarah Riedmann on 30.11.21.
 //
 
 #include "ir_remote.h"
-#include "gpio.h"
 
-#include <IRremote.hpp>
+#include <IRsend.h>
+#include <IRrecv.h>
+#include <IRremoteESP8266.h>
+#include <IRutils.h>
 
-void initIR() {
-    IrReceiver.begin(IR_RECEIVER_PIN, ENABLE_LED_FEEDBACK); // Start the receiver
-    // IrSender.begin(IR_TRANSMITTER_PIN, ENABLE_LED_FEEDBACK); // Start the transmitter
+IRsend irsend(kIrLedPin);
+IRrecv irrecv(kRecvPin, kCaptureBufferSize, kTimeout, false);
+
+decode_results results;
+
+
+void initIRSenderAndReceiver(){
+    irrecv.enableIRIn();  // Start up the IR receiver.
+    irsend.begin();       // Start up the IR sender.
 }
 
-void sendIRData(uint16_t sAddress, uint8_t sCommand, uint8_t sRepeats) {
-    Serial.print(F("Sending: 0x"));
-    Serial.print(sAddress, HEX);
-    Serial.print(sCommand, HEX);
-    Serial.println(sRepeats, HEX);
+void receiveAndSendData(){
+    if (irrecv.decode(&results)) {
+        decode_results receivedData = getReceivedIRData();
+        sendIRData(&receivedData);
 
-    // clip repeats at 4
-    if (sRepeats > 4) {
-        sRepeats = 4;
+        irrecv.resume();
     }
-    // Results for the first loop to: Protocol=NEC Address=0x102 Command=0x34 Raw-Data=0xCB340102 (32 bits)
-    IrSender.sendNEC(sAddress, sCommand, sRepeats);
+    yield();
 }
 
-void sendReceiveDelay() {
-    // wait for the receiver state machine to detect the end of a protocol
-    delay((RECORD_GAP_MICROS / 1000) + 5);
+decode_results getReceivedIRData(){
+    Serial.print(F("Received decoded raw data: "));
+    Serial.print(results.value, HEX);
+    Serial.print(F(", decoded address: "));
+    Serial.print(results.address, HEX);
+    Serial.print(F(", decoded command: "));
+    Serial.println(results.command, HEX);
+
+    return results;
 }
 
+void sendIRData(decode_results* data){
+    // Convert the results into an array suitable for sendRaw().
+    // resultToRawArray() allocates the memory we need for the array.
+    uint16_t* raw_array = resultToRawArray(data);
+    // Find out how many elements are in the array.
+    uint16_t length = getCorrectedRawLength(data);
 
-void receiveIRData() {
+    // Send it out via the IR LED circuit.
+    irsend.sendRaw(raw_array, length, kFrequency);
 
-    if (IrReceiver.decode()) {
-        Serial.print(F("Decoded protocol: "));
-        Serial.print(getProtocolString(IrReceiver.decodedIRData.protocol));
-        Serial.print(F("Decoded raw data: "));
-        Serial.print(IrReceiver.decodedIRData.decodedRawData, HEX);
-        Serial.print(F(", decoded address: "));
-        Serial.print(IrReceiver.decodedIRData.address, HEX);
-        Serial.print(F(", decoded command: "));
-        Serial.println(IrReceiver.decodedIRData.command, HEX);
-        IrReceiver.resume();
-    }
+    delete [] raw_array;
+
+    Serial.print(F("Transmitted decoded raw data: "));
+    Serial.print(data->value, HEX);
+    Serial.print(F(", decoded address: "));
+    Serial.print(data->address, HEX);
+    Serial.print(F(", decoded command: "));
+    Serial.println(data->command, HEX);
 }
