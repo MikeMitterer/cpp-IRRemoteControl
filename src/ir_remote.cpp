@@ -10,9 +10,10 @@
 #include <IRutils.h>
 
 IRsend irsend(kIrLedPin);
-IRrecv irrecv(kRecvPin, kCaptureBufferSize, kTimeout, false);
+IRrecv irrecv(kRecvPin, kCaptureBufferSize, kTimeout, true);
 
 decode_results results;
+decode_results lastReceivedData;
 
 
 void initIRSenderAndReceiver(){
@@ -20,15 +21,23 @@ void initIRSenderAndReceiver(){
     irsend.begin();       // Start up the IR sender.
 }
 
-void receiveAndSendData(){
+void receiveAndRetransmitData(){
     if (irrecv.decode(&results)) {
-        decode_results receivedData = getReceivedIRData();
-        sendIRData(&receivedData);
+        lastReceivedData = getReceivedIRData();
+        sendIRData(&lastReceivedData);
 
         irrecv.resume();
     }
-    yield();
 }
+
+void receiveIRData(){
+    if (irrecv.decode(&results)) {
+        lastReceivedData = getReceivedIRData();
+
+        irrecv.resume();
+    }
+}
+
 
 decode_results getReceivedIRData(){
     Serial.print(F("Received decoded raw data: "));
@@ -39,6 +48,10 @@ decode_results getReceivedIRData(){
     Serial.println(results.command, HEX);
 
     return results;
+}
+
+void sendLastReceivedIRData(){
+    sendIRData(&lastReceivedData);
 }
 
 void sendIRData(decode_results* data){

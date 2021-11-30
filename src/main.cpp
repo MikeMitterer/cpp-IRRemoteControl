@@ -12,6 +12,7 @@
  *      
  */
 #include "stdafx.h"
+#define DECODE_NEC true
 
 #include "config.h"
 #include "ota.h"
@@ -50,6 +51,7 @@ void setup() {
     button1.attachClick([] () {
         blink(LED_ORANGE);
         Log.notice("Button1" CR CR);
+        sendLastReceivedIRData();
     });
 
     button2.setClickTicks(10);
@@ -71,7 +73,8 @@ void loop() {
 
     blink(LED_GREEN);
 
-    receiveAndSendData();
+    //receiveAndRetransmitData();
+    receiveIRData();
 
-    delay(1000);
+    delay(10);
 }

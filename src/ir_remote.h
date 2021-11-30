@@ -29,7 +29,7 @@ const uint16_t kCaptureBufferSize = 1024;
 
 // kTimeout is the Nr. of milli-Seconds of no-more-data before we consider a
 // message ended.
-const uint8_t kTimeout = 50;  // Milli-Seconds
+const uint8_t kTimeout = 30;  // Milli-Seconds
 
 // kFrequency is the modulation frequency all messages will be replayed at.
 const uint16_t kFrequency = 38000;  // in Hz. e.g. 38kHz.
@@ -37,17 +37,15 @@ const uint16_t kFrequency = 38000;  // in Hz. e.g. 38kHz.
 
 void initIRSenderAndReceiver();
 
-void receiveAndSendData();
+void receiveAndRetransmitData();
+
+void receiveIRData();
 
 decode_results getReceivedIRData();
 
-void retransmitData();
+void sendLastReceivedIRData();
 
 void sendIRData(decode_results* data);
-
-
-
-
 
 
 // #endif //IRREMOTECONTROL_IR_REMOTE_NEW_H
