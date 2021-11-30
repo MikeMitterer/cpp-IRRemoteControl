@@ -17,6 +17,9 @@
     const uint8_t LED_YELLOW = GPIO_NUM_17;
     const uint8_t LED_ORANGE = GPIO_NUM_16;
     const uint8_t LED_RED = GPIO_NUM_4;
+
+    const uint8_t IR_RECEIVER_PIN = GPIO_NUM_7;
+    const uint8_t IR_TRANSMITTER_PIN = GPIO_NUM_8;
 #else
     const uint8_t LED_WHITE = 19;
     const uint8_t LED_BLUE = 18;
@@ -24,6 +27,9 @@
     const uint8_t LED_YELLOW = 17;
     const uint8_t LED_ORANGE = 16;
     const uint8_t LED_RED = 4;
+
+    const uint8_t IR_RECEIVER_PIN = 7;
+    const uint8_t IR_TRANSMITTER_PIN = 8;
 #endif
 
 const std::vector<uint8_t> ledArray = {

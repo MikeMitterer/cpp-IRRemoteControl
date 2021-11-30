@@ -17,6 +17,7 @@
 #include "ota.h"
 #include "gpio.h"
 #include "utils.h"
+#include "ir_remote.h"
 
 #include <Esp.h>
 #include <ESPAsyncWebServer.h>
@@ -24,6 +25,8 @@
 
 const std::string ssid{ Project_SSID };
 const std::string password{  Project_PASSWORD };
+
+
 
 void setup() {
     Serial.begin(115200);
@@ -36,34 +39,39 @@ void setup() {
     showHWInfo();
 
     initLEDs(ledArray);
-    initWIFI(ssid, password);
+    // initWIFI(ssid, password);
+
+    initIRSenderAndReceiver();
+
     // initButtons(buttons);
 
     button1.setClickTicks(10);
     button1.setDebounceTicks(5);
     button1.attachClick([] () {
         blink(LED_ORANGE);
+        Log.notice("Button1" CR CR);
     });
 
     button2.setClickTicks(10);
     button2.setDebounceTicks(5);
     button2.attachClick([] () {
         blink(LED_WHITE);
+        Log.notice("Button2" CR CR);
     });
 
-    initOTA();
-    ArduinoOTA.begin();
+    // initOTA();
+    // ArduinoOTA.begin();
 }
 
 void loop() {
-    ArduinoOTA.handle();
-    
+    // ArduinoOTA.handle();
+
     button1.tick();
     button2.tick();
 
-    // Serial.println("Hello OAT!");
+    blink(LED_GREEN);
 
-    // blink(LED_GREEN);
+    receiveAndSendData();
 
-    delay(1);
+    delay(1000);
 }
